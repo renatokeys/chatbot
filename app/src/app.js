@@ -75,10 +75,10 @@ client.on('message', async msg => {
                 }
                 else if(initLeveling.data.type === 'text'){
                     setTimeout(async() => {
-                        if(initLeveling.data.body.includes('!url')){
-                            let body = initLeveling.data.body;
-                            body = body.replace('!url', helpers.getUrl(contact.data.answer[4]))
-                        }
+                        let body = initLeveling.data.body;
+                        let url = helpers.getUrl(msg.body, contact.data.answer[3].split('\n')[0])
+                        body = body.replace('!url', url.id)
+                        body = body.replace('!receita', url.name.toLowerCase())
                         await client.sendMessage(msg.from, body)
                     }, initLeveling.data.delay )
                     
