@@ -1,5 +1,6 @@
 const { List, Buttons } = require('whatsapp-web.js');
 const client = require('../services/wppService')
+const firstName = require('../helpers/firstname')
 
 exports.sendButton = async (msg, data) => {
     let buttons = []
@@ -8,7 +9,23 @@ exports.sendButton = async (msg, data) => {
             body: button.text
         })
     })
+    if(data.state === 0) {
+        const contact = await msg.getContact()
+        let contactName = contact.verifiedName ? contact.verifiedName : contact.pushname
+        contactName = firstName(contactName)
+        data.body = data.body.replace('!fname', contactName)
+        data.title = data.title.replace('!fname', contactName)
+    }
     let button = new Buttons(data.body, buttons, data.title, data.footer);
     setTimeout(async () => { await client.sendMessage(msg.from, button) }, data.delay)
-    console.log(button)
+}
+
+exports.sendMediaButton = async (msg, data) => {
+    let button = new Buttons(data.body, data.buttons, data.title, data.footer);
+    setTimeout(async () => { await client.sendMessage(msg.from, button) }, data.delay)
+}
+
+exports.sendList = async (msg, data) => {
+    let list = new List(data.body, data.sections[0].title , data.sections, data.title, data.footer);
+    setTimeout(async () => { await client.sendMessage(msg.from, list)}, data.delay)
 }
