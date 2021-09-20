@@ -1,0 +1,15 @@
+const [ client, q ] = require('../services/faunaService')
+
+exports.getMessageByState = async (state) => {
+    const messages = await client.query(
+        q.Get(q.Match(q.Index('message_by_state'), state))
+    )
+    return messages
+}
+exports.getMessageByResponse = async (response) => {
+    const messages = await client.query(
+        q.Get(q.Match(q.Index('message_by_text'), response))
+    )
+    return messages
+}
+    

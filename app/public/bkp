@@ -1,0 +1,25 @@
+ if (msg.body === '!buttons') {
+        const media = MessageMedia.fromFilePath('./public/foto.jpeg');
+        let button = new Buttons(media,[{body:'bt1'},{body:'bt2'},{body:'bt3'}],'title','footer');
+        client.sendMessage(msg.from, button);
+    } else if (msg.body === '!lista') {
+        const chat = await msg.getChat();
+        console.log(chat.name)
+        let sections = [
+            {
+                title:'Fritos',
+                rows:[
+                    {title:'Coxinha', description: 'R$ 5,00'},
+                    {title:'Quibe', description: 'R$ 5,00'},
+                    {title:'Pizzarola', description: 'R$ 5,00'},
+                    {title:'Croquete', description: 'R$ 5,00'},
+                ]
+            },
+        ];
+        let list = new List('\n\nPara continuar selecione o salgado na lista de opções abaixo.','Ver Opções',sections,'Olá, seja bem vindo(a)','Salgados & Delivery');
+        client.sendMessage(msg.from, list);
+    } else if (msg.body === '!typing') {
+        const chat = await msg.getChat();
+        // simulates typing in the chat
+        chat.sendStateTyping();
+}
