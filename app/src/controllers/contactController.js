@@ -73,3 +73,18 @@ exports.updateResp = async (number, resp) => {
     )
     return contact;
 }
+
+exports.updateContactRecipes = async (number, recipeNumber) => {
+    const contact = await client.query(
+        q.Let({
+            doc : q.Get(q.Match(q.Index('contact_by_number'), number))
+        },
+        q.Update(q.Select(['ref'], q.Var('doc')), {
+            data: {
+                recipes : q.Append(recipeNumber, q.Select(['data', 'recipes'], q.Var('doc')))
+            }
+        })
+        )
+    )
+    return contact;
+}

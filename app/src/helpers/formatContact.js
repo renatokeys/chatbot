@@ -2,15 +2,18 @@ const firstName = require("./firstname");
 
 exports.formatContact = async (data) => {
     const contact = await data.getContact(data);
+    const picurl = await contact.getProfilePicUrl()
     let contactName = contact.verifiedName ? contact.verifiedName : contact.pushname;
     const fname = firstName(contactName);
     let user = {
         fname,
+        picurl,
         name: contactName,
         email: "",
         number: data.from,
         state: 0,
         answer: [],
+        recipes: []
     };
     return user;
 };
@@ -27,8 +30,8 @@ exports.getUrl = (data, liked) => {
                     break;
                 case "Receita 2":
                     return {
-                        name: "BONECA COM VESTIDO ROSA",
-                        id: "73",
+                        name: "Boneca Ava",
+                        id: "66",
                     };
                     break;
                 case "Receita 3":

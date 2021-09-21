@@ -77,7 +77,10 @@ client.on('message', async msg => {
                     setTimeout(async() => {
                         let body = initLeveling.data.body;
                         let url = helpers.getUrl(msg.body, contact.data.answer[3].split('\n')[0])
-                        body = body.replace('!url', url.id)
+                        await controller.updateContactRecipes(msg.from, url.id)
+                        let number = msg.from
+                        number = number.replace('@c.us', '')
+                        body = body.replace('!url', `https://curso.artsdeamigurumi.online/aluno/${number}`)
                         body = body.replace('!receita', url.name.toLowerCase())
                         await client.sendMessage(msg.from, body)
                     }, initLeveling.data.delay )
@@ -138,7 +141,7 @@ client.on('message', async msg => {
                         
                     }
                     else {
-
+                        await client.sendMessage(msg.from,`Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nwww.curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
                     }
                     setTimeout(async()=>{await chat.sendStateTyping()},2000)
                 },30000)
