@@ -141,6 +141,7 @@ client.on('message', async msg => {
                         
                     }
                     else {
+                        await controller.updateContactRecipes(msg.from, 'abelhinha')
                         await client.sendMessage(msg.from,`Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nwww.curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
                     }
                     setTimeout(async()=>{await chat.sendStateTyping()},2000)
