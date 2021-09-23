@@ -200,3 +200,13 @@ exports.getSupportName = () => {
     const assistantName = `${fname[getFirstName]} ${lname[getLastName]}` 
     return assistantName;
 }
+
+exports.sendAlreadyResponse = async (msg, client) => {
+    try {
+        await client.sendMessage(msg.from, 'Desculpe, você já respondeu a esta mensagem.')
+    } catch (err) {
+        console.log(err)
+    } finally {
+        return true
+    }
+}

@@ -1,4 +1,4 @@
-const { List, Buttons } = require('whatsapp-web.js');
+const { List, Buttons, MessageMedia } = require('whatsapp-web.js');
 const client = require('../services/wppService')
 const firstName = require('../helpers/firstname')
 
@@ -28,4 +28,22 @@ exports.sendMediaButton = async (msg, data) => {
 exports.sendList = async (msg, data) => {
     let list = new List(data.body, data.sections[0].title , data.sections, data.title, data.footer);
     setTimeout(async () => { await client.sendMessage(msg.from, list)}, data.delay)
+}
+
+exports.simulateTyping = async (msg) => {
+    try {
+        const chat = await msg.getChat()
+        await chat.sendStateTyping()
+    } catch (err) {
+        console.log(err)
+    } finally {
+        return true
+    }
+    
+
+}
+
+exports.sendMediaSticker = async (client, msg, path) => {
+    const media = MessageMedia.fromFilePath(path);
+    await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
 }

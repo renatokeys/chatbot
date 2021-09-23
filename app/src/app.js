@@ -14,8 +14,7 @@ client.on('message', async msg => {
     if(contact.data.state === 0) {  // novo contato
         const isKeyword = await keywordController.get_keyword_by_keyname(msg.body.toLowerCase());
         if(isKeyword){
-            const media = MessageMedia.fromFilePath('./public/stickers/hi.png');
-            await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
+            wppController.sendMediaSticker(client,msg,'./public/stickers/hi.png')
             const resp = await messageController.getMessageByState(contact.data.state)
             if(resp.data.type === 'button'){
                 await wppController.sendButton(msg, resp.data)
@@ -52,7 +51,7 @@ client.on('message', async msg => {
                     }
                     
                 } else if(resp.data.state < contact.data.state) {
-                    await client.sendMessage(msg.from, 'Desculpe, você já respondeu a esta mensagem.')
+                    helpers.sendAlreadyResponse(msg, client)
                 }
             }
         }
@@ -86,26 +85,24 @@ client.on('message', async msg => {
 
             }
             else if(resp.data.state < contact.data.state){
-                await client.sendMessage(msg.from,'Você já respondeu a esta mensagem.')
+                helpers.sendAlreadyResponse(msg, client)
             }
         } else if(msg.type === 'list_response') {
-            if(contact.data.state>4) return client.sendMessage(msg.from, 'Você já respondeu a esta mensagem')
-            let chat = await msg.getChat()
+            if(contact.data.state>4) return helpers.sendAlreadyResponse(msg, client)
             let level = 0
             let choose = ''
             choose, level = helpers.formatChoose(contact.data.answer[2], level)
             await controller.updateResp(msg.from, msg.body)
             await controller.updateContactState(msg.from, contact.data.state + 1)
             await client.sendMessage(msg.from, `Obrigado pelas respostas\n\nPor favor aguarde um instante que uma artesã irá finalizar seu atendimento.\n\nAté a próxima`)
-                const media = MessageMedia.fromFilePath('./public/stickers/hi.png');
-                await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
+                wppController.sendMediaSticker(client, msg, './public/stickers/hi.png')
                 setTimeout(async()=>{
                     await client.sendMessage(msg.from, `*${helpers.getSupportName()} entrou na conversa.*`)
-                    setTimeout(async()=>{await chat.sendStateTyping()},2000)
+                    setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
                 }, 10000)
                 setTimeout(async()=>{
                     await client.sendMessage(msg.from, `Oiie ${contact.data.name}, tudo bem com você?\n\nVi aqui que você respondeu que ${choose}`)
-                    setTimeout(async()=>{await chat.sendStateTyping()},2000)
+                    setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
                 }, 20000)
                 setTimeout(async()=>{
                     if(level > 0){
@@ -125,7 +122,7 @@ client.on('message', async msg => {
                         await controller.updateContactRecipes(msg.from, 'abelhinha')
                         await client.sendMessage(msg.from,`Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nwww.curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
                     }
-                    setTimeout(async()=>{await chat.sendStateTyping()},2000)
+                    setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
                 },30000)
                 
                 // muda status para 4
