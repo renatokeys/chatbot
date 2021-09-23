@@ -1,8 +1,7 @@
 'use strict';
 
-const usersChangingName = []
 
-exports.firstName = (userName) => {
+const firstName = exports.firstName = (userName) => {
     var fname = userName;
     if (/\s/.test(fname)) {
         fname = userName.split(" ")[0];
@@ -168,7 +167,7 @@ exports.getUrl = (data, liked) => {
 };
 
 exports.formartName = (string) => {
-    const prefix = ['prefiro que ', 'me chame ', 'igual minha ', 'mãe ',', ','pode me chamar de ', 'pode me chamar ', 'eu gosto que ', 'me chame de ', 'me chamo ',' pode chamar ','meu nome é ','meu nome e ', 'meu nome ','eu sou ', 'sou o ', 'me chama de ']
+    const prefix = ['prefiro que ', 'me chame de', 'igual minha ', 'mãe ',', ','pode me chamar de ', 'pode me chamar ', 'eu gosto que ', 'me chame ', 'me chamo ',' pode chamar ','meu nome é ','meu nome e ', 'meu nome ','eu sou ', 'sou o ', 'me chama de ']
     let name = string.toLowerCase();
     prefix.forEach(prefixString => { 
         if(name.includes(prefixString)){
@@ -177,19 +176,29 @@ exports.formartName = (string) => {
     return name;
 }
 
-exports.formatChoose = (data, level) => {
+exports.formatChoose = async (data) => {
+    console.log(data)
     let choose = data;
+    let level = 0;
     switch(data) {
         case 'Vai ser meu primeiro Amigurumi':
             choose = 'vai ser seu primeiro amigurumi então irei separar algumas vídeo aulas para você seguir e fazer seu primeiro amigurumi.'
+            break;
         case 'Já faço e vendo, quero mais modelos':
             level += 1
             choose = 'já faz amigurumis para vender então irei separar 3 receitas para você escolher uma e faturar bastante rsrs'
+            break;
         case 'Já fiz alguns mais simples':
             level += 1
             choose = 'ja fez alguns simples então irei separar 3 receitas de nível médio para você, você vai amar!'
+            break;
     }
-    return choose, level;
+    const finalData = {
+        choose: choose,
+        level: level
+    }
+    console.log(finalData)
+    return finalData
 }
 
 exports.getSupportName = () => {

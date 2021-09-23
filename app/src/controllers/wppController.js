@@ -1,6 +1,6 @@
 const { List, Buttons, MessageMedia } = require('whatsapp-web.js');
 const client = require('../services/wppService')
-const firstName = require('../helpers/firstname')
+const helpers = require('../utils/helpers')
 
 exports.sendButton = async (msg, data) => {
     let buttons = []
@@ -12,7 +12,7 @@ exports.sendButton = async (msg, data) => {
     if(data.state === 0) {
         const contact = await msg.getContact()
         let contactName = contact.verifiedName ? contact.verifiedName : contact.pushname
-        contactName = firstName(contactName)
+        contactName = helpers.firstName(contactName)
         data.body = data.body.replace('!fname', contactName)
         data.title = data.title.replace('!fname', contactName)
     }
@@ -43,7 +43,7 @@ exports.simulateTyping = async (msg) => {
 
 }
 
-exports.sendMediaSticker = async (client, msg, path) => {
+exports.sendMediaSticker = async (msg, path) => {
     const media = MessageMedia.fromFilePath(path);
     await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
 }
