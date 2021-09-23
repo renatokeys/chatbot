@@ -1,8 +1,7 @@
 const client = require('./services/wppService');
 const controller = require('./controllers/contactController')
 const keywordController = require('./controllers/keywordController')
-const helpers = require('./helpers/formatContact')
-const nameHelpers = require('./helpers/formatName')
+const helpers = require('./utils/helpers')
 const messageController = require('./controllers/messageController')
 const wppController = require('./controllers/wppController')
 const { MessageMedia } = require('whatsapp-web.js')
@@ -24,18 +23,16 @@ client.on('message', async msg => {
         } else {
             if(msg.type === 'chat') {
                 if(usersChangingName.indexOf(msg.from) > -1){
-                    const name = nameHelpers.formartName(msg.body)
+                    const name = helpers.formartName(msg.body)
                     await client.sendMessage(msg.from, `Tudo bem, te chamarei de ${name}`)
                     usersChangingName.splice(usersChangingName.indexOf(msg.from), 1);
-                    // muda name na database
                     await controller.updateContactName(msg.from, name)
                     await controller.updateContactState(msg.from, 1)
                     const initLeveling = await messageController.getMessageByState(1)
                     if(initLeveling.data.type === 'button'){
                         await wppController.sendButton(msg, initLeveling.data)
                     }
-                    // muda state para +1 
-                    // envia começar nivelamento
+
                 }
                 console.log('nlp')
             } else if(msg.type === 'buttons_response') {
@@ -95,35 +92,19 @@ client.on('message', async msg => {
             if(contact.data.state>4) return client.sendMessage(msg.from, 'Você já respondeu a esta mensagem')
             let chat = await msg.getChat()
             let level = 0
+            let choose = ''
+            choose, level = helpers.formatChoose(contact.data.answer[2], level)
             await controller.updateResp(msg.from, msg.body)
             await controller.updateContactState(msg.from, contact.data.state + 1)
             await client.sendMessage(msg.from, `Obrigado pelas respostas\n\nPor favor aguarde um instante que uma artesã irá finalizar seu atendimento.\n\nAté a próxima`)
                 const media = MessageMedia.fromFilePath('./public/stickers/hi.png');
                 await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
                 setTimeout(async()=>{
-                    const suporte = ['Suelem H.', 'Leticia P.','Amanda M.','Marcela A.','Patricia P.','Maria A.','Lorena A.']
-                    var rn = Math.floor(Math.random()*suporte.length)
-                    await client.sendMessage(msg.from, `*${suporte[rn]} entrou na conversa.*`)
+                    await client.sendMessage(msg.from, `*${helpers.getSupportName()} entrou na conversa.*`)
                     setTimeout(async()=>{await chat.sendStateTyping()},2000)
                 }, 10000)
                 setTimeout(async()=>{
-                    
-                    const formatChoose = (data) => {
-                        switch(data) {
-                            case 'Vai ser meu primeiro Amigurumi':
-                                return 'vai ser seu primeiro amigurumi então irei separar algumas vídeo aulas para você seguir e fazer seu primeiro amigurumi.'
-                                break;
-                            case 'Já faço e vendo, quero mais modelos':
-                                level += 1
-                                return 'já faz amigurumis para vender então irei separar 3 receitas para você escolher uma e faturar bastante rsrs'
-                                break;
-                            case 'Já fiz alguns mais simples':
-                                level += 1
-                                return 'ja fez alguns simples então irei separar 3 receitas de nível médio para você, você vai amar!'
-                                break;
-                        }
-                    }
-                    await client.sendMessage(msg.from, `Oiie ${contact.data.name}, tudo bem com você?\n\nVi aqui que você respondeu que ${formatChoose(contact.data.answer[2])}`)
+                    await client.sendMessage(msg.from, `Oiie ${contact.data.name}, tudo bem com você?\n\nVi aqui que você respondeu que ${choose}`)
                     setTimeout(async()=>{await chat.sendStateTyping()},2000)
                 }, 20000)
                 setTimeout(async()=>{
