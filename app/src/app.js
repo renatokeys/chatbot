@@ -5,8 +5,10 @@ const messageController = require('./controllers/messageController')
 const levelingController = require('./controllers/levelingController')
 const adminController = require('./controllers/adminController')
 const wppController = require('./controllers/wppController')
+const nlpController= require('./controllers/nlpController')
 
 client.on('message', async msg => {
+    //await nlpController.nlp(msg)
     //await adminController.checkAdminResponses(msg)
     //await wppController.notifyAdmins(msg)
     const user = await helpers.formatContact(msg)    

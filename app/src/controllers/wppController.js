@@ -2,6 +2,7 @@ const { List, Buttons, MessageMedia } = require('whatsapp-web.js');
 const client = require('../services/wppService')
 const helpers = require('../utils/helpers')
 const adminController = require('./adminController')
+const nlpController = require('./nlpController')
 
 exports.sendButton = async (msg, data) => {
     let buttons = []
@@ -52,14 +53,20 @@ exports.sendMediaSticker = async (msg, path) => {
 exports.notifyAdmins = async (msg) => {
     const admins = await adminController.getAdmins()
     for(let i=0; i<admins.length; i++) { // run all admins array
-        let adminChat = await client.getChatById(`${admins[i].data.number}@c.us`)
-        setTimeout(async () => {
-            const resp = await client.sendMessage(`${admins[i].data.number}@c.us`,`O número ${msg.from.split('@c.us')[0]} enviou a seguinte mensagem.`)// notify admins
-            setTimeout (async () => {
-                await msg.forward(adminChat)
-            }, 2000)
-            //console.log(resp)
-        }, 3000 * i)
+        if (msg.from !== `${admins[i].data.number}@c.us`){
+            let adminChat = await client.getChatById(`${admins[i].data.number}@c.us`)
+            setTimeout(async () => {
+                const resp = await client.sendMessage(`${admins[i].data.number}@c.us`,`O número ${msg.from.split('@c.us')[0]} enviou a seguinte mensagem.`)// notify admins
+                setTimeout (async () => {
+                    await msg.forward(adminChat)
+                    await nlpController.addAnswerProcess(msg)
+                }, 2000)
+                //console.log(resp)
+            }, 3000 * i)
+        }
     }
 }
 
+exports.sendText = async (msg) => {
+    await client.sendMessage(msg.from, msg.body)
+}

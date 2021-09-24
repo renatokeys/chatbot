@@ -1,0 +1,309 @@
+{
+  "settings": {
+    "languages": [
+      "pt"
+    ],
+    "forceNER": true,
+    "tag": "nlp",
+    "threshold": 0.5,
+    "autoLoad": true,
+    "autoSave": true,
+    "modelFileName": "model.nlp",
+    "calculateSentiment": true
+  },
+  "nluManager": {
+    "settings": {
+      "tag": "nlu-manager"
+    },
+    "locales": [
+      "pt"
+    ],
+    "languageNames": {},
+    "domainManagers": {
+      "pt": {
+        "settings": {
+          "locale": "pt",
+          "trainByDomain": false,
+          "tag": "domain-manager-pt",
+          "nluByDomain": {
+            "default": {
+              "className": "NeuralNlu",
+              "settings": {}
+            }
+          },
+          "useStemDict": true
+        },
+        "stemDict": {
+          "ola": {
+            "intent": "hello",
+            "domain": "default"
+          },
+          "oi": {
+            "intent": "hello2",
+            "domain": "default"
+          },
+          "oii": {
+            "intent": "hello3",
+            "domain": "default"
+          },
+          "oie": {
+            "intent": "hello",
+            "domain": "default"
+          },
+          "oiie": {
+            "intent": "hello",
+            "domain": "default"
+          }
+        },
+        "intentDict": {
+          "hello": "default",
+          "hello2": "default",
+          "hello3": "default"
+        },
+        "sentences": [
+          {
+            "domain": "default",
+            "utterance": "olá",
+            "intent": "hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "oi",
+            "intent": "hello2"
+          },
+          {
+            "domain": "default",
+            "utterance": "oii",
+            "intent": "hello3"
+          },
+          {
+            "domain": "default",
+            "utterance": "oie",
+            "intent": "hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "oiie",
+            "intent": "hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "olá",
+            "intent": "hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "oi",
+            "intent": "hello2"
+          },
+          {
+            "domain": "default",
+            "utterance": "oii",
+            "intent": "hello3"
+          },
+          {
+            "domain": "default",
+            "utterance": "oie",
+            "intent": "hello"
+          },
+          {
+            "domain": "default",
+            "utterance": "oiie",
+            "intent": "hello"
+          }
+        ],
+        "domains": {
+          "master_domain": {
+            "settings": {
+              "locale": "pt",
+              "tag": "nlu-pt",
+              "keepStopwords": true,
+              "nonefeatureValue": 1,
+              "nonedeltaMultiplier": 1.2,
+              "spellCheck": false,
+              "spellCheckDistance": 1,
+              "filterZeros": true,
+              "log": true
+            },
+            "features": {
+              "ola": 1,
+              "oi": 1,
+              "oii": 1,
+              "oie": 1,
+              "oiie": 1
+            },
+            "intents": {
+              "hello": 1,
+              "hello2": 1,
+              "hello3": 1
+            },
+            "intentFeatures": {
+              "hello": {
+                "ola": 1,
+                "oie": 1,
+                "oiie": 1
+              },
+              "hello2": {
+                "oi": 1
+              },
+              "hello3": {
+                "oii": 1
+              }
+            },
+            "featuresToIntent": {
+              "ola": [
+                "hello"
+              ],
+              "oie": [
+                "hello"
+              ],
+              "oiie": [
+                "hello"
+              ],
+              "oi": [
+                "hello2"
+              ],
+              "oii": [
+                "hello3"
+              ]
+            },
+            "neuralNetwork": {
+              "settings": {
+                "locale": "pt",
+                "tag": "nlu-pt",
+                "keepStopwords": true,
+                "nonefeatureValue": 1,
+                "nonedeltaMultiplier": 1.2,
+                "spellCheck": false,
+                "spellCheckDistance": 1,
+                "filterZeros": true,
+                "log": true
+              },
+              "features": [
+                "ola",
+                "oi",
+                "oii",
+                "oie",
+                "oiie"
+              ],
+              "intents": [
+                "hello",
+                "hello2",
+                "hello3"
+              ],
+              "perceptrons": [
+                [
+                  8.071642875671387,
+                  -6.028010845184326,
+                  -6.0065507888793945,
+                  8.113346099853516,
+                  8.096729278564453,
+                  6.123445048341527
+                ],
+                [
+                  -1.9904297590255737,
+                  12.09726333618164,
+                  -2.0163636207580566,
+                  -2.0095906257629395,
+                  -2.002457857131958,
+                  2.039384372017318
+                ],
+                [
+                  -1.998490571975708,
+                  -1.9904447793960571,
+                  12.097248077392578,
+                  -2.0163798332214355,
+                  -2.0096073150634766,
+                  2.0411367408291827
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "intentDomains": {},
+    "extraSentences": [
+      [
+        "pt",
+        "olá"
+      ],
+      [
+        "pt",
+        "oi"
+      ],
+      [
+        "pt",
+        "oii"
+      ],
+      [
+        "pt",
+        "oie"
+      ],
+      [
+        "pt",
+        "oiie"
+      ],
+      [
+        "pt",
+        "olá"
+      ],
+      [
+        "pt",
+        "oi"
+      ],
+      [
+        "pt",
+        "oii"
+      ],
+      [
+        "pt",
+        "oie"
+      ],
+      [
+        "pt",
+        "oiie"
+      ]
+    ]
+  },
+  "ner": {
+    "settings": {
+      "tag": "ner",
+      "entityPreffix": "%",
+      "entitySuffix": "%"
+    },
+    "rules": {}
+  },
+  "nlgManager": {
+    "settings": {
+      "tag": "nlg-manager"
+    },
+    "responses": {
+      "pt": {
+        "hello2": [
+          {
+            "answer": "Oiie"
+          }
+        ],
+        "hello": [
+          {
+            "answer": "Olá"
+          },
+          {
+            "answer": "Oi"
+          },
+          {
+            "answer": "Oie"
+          }
+        ]
+      }
+    }
+  },
+  "actionManager": {
+    "settings": {
+      "tag": "action-manager"
+    },
+    "actions": {}
+  },
+  "slotManager": {}
+}
