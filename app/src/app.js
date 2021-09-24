@@ -3,9 +3,13 @@ const controller = require('./controllers/contactController')
 const helpers = require('./utils/helpers')
 const messageController = require('./controllers/messageController')
 const levelingController = require('./controllers/levelingController')
+const adminController = require('./controllers/adminController')
+const wppController = require('./controllers/wppController')
 
 client.on('message', async msg => {
-    const user = await helpers.formatContact(msg)
+    //await adminController.checkAdminResponses(msg)
+    //await wppController.notifyAdmins(msg)
+    const user = await helpers.formatContact(msg)    
     let contact = await controller.checkContactExists(user);
     if(contact.data.state === 0) { // Novo contato
         await levelingController.newLevelingContact(msg, contact)
