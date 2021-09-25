@@ -1,184 +1,155 @@
-
-const sendQuestion1 = async (msg) => {
-    const message = 'O que você busca com os Amigurumis?'
-    const title = 'Pergunta 1'
-    const footer = '\nSelecione a resposta clicando abaixo 👇'
-    const resp1 = resposta1[0]
-    const resp2 = resposta1[1]
-    const resp3 = resposta1[2]
-    let button = new Buttons(`\n${message}`,[{body:resp1},{body:resp2},{body:resp3}],title,footer);
-    await client.sendMessage(msg.from, button);
-}
-const sendRecipeChoose = async (msg) => {
-    const title = 'Prontinho escolha uma receita'
-    const media = MessageMedia.fromFilePath(`./public/recipes/${msg.body.split('\n')[0].toLowerCase()}.png`);
-    const footer = '\nSelecione uma receita clicando abaixo 👇'
-    const resp1 = 'Receita 1'
-    const resp2 = 'Receita 2'
-    const resp3 = 'Receita 3'
-    let button = new Buttons(media,[{body:resp1},{body:resp2},{body:resp3}],title,footer);
-    await client.sendMessage(msg.from, button);
-}
-const sendQuestion2 = async (msg) => {
-    const message = 'Qual a sua afinidade com essas fofuras?'
-    const title = 'Pergunta 2'
-    const footer = '\nSelecione a resposta clicando abaixo 👇'
-    const resp1 = resposta2[0]
-    const resp2 = resposta2[1]
-    const resp3 = resposta2[2]
-    let button = new Buttons(`\n${message}`,[{body:resp1},{body:resp2},{body:resp3}],title,footer);
-    await client.sendMessage(msg.from, button);
-}
-const sendQuestion3 = async (msg) => {
-        let sections = [
-            {
-                title:'Escolha o modelo',
-                rows:[
-                    {title:'Bonecos', description: 'Quero receitas de bonecas, bonecos de roupas customizadas'},
-                    {title:'Animais', description: 'Quero receitas de Animais como gato, cachorro, safari e outros'},
-                    {title:'Desenhos', description: 'Quero receitas de filmes, super herois, e outros tipos de cartoons'},
-                    {title:'Comidas', description: 'Quero receitas de todos os tipos de frutas e guloseimas'},
-                    {title:'Religiosas', description: 'Quero receitas de datas comemorativas'},
-                    {title:'Natalinas', description: 'Quero receitas de duendes, bonecos de neve, renas e outros.'},
-                ]
-            },
-        ];
-        let list = new List('\n\nPara finalizar, gostaria de saber quais modelos de amigurumis você gosta mais, você pode escolher clicando abaixo','Escolher Modelo',sections,'Pergunta 3','Amigurumis');
-        await client.sendMessage(msg.from, list);
-}
-
-const suporte = ['Suelem H.', 'Leticia P.','Amanda M.','Marcela A.','Patricia P.','Maria A.','Lorena A.']
+{
+    "type": "button",
+    "title": "Oiee !fname, tudo bem?",
+    "body": "\nMe chamo Amibô, sou o responsável por fazer o seu nivelamento, assim nosso suporte poderá enviar uma aula de acordo com seu nível.\n\nAntes de começar, posso continuar te chamando de !fname ?",
+    "footer": "",
+    "buttons": [
+      {
+        "id": "1",
+        "text": "Pode sim"
+      },
+      {
+        "id": "2",
+        "text": "Não pode"
+      }
+    ],
+    "delay": 4000,
+    "state": 0
+  }
 
 
-
-
-
-
-const existe = await getContact(msg.from)
-    console.log(existe)
-    let chat = await msg.getChat()
-    let fname = chat.name ? chat.name : chat.verifiedName?chat?.verifiedName:chat?.pushname
-    fname = firstName(fname)
-    console.log(msg.from)
-    if(msg.from === '553399076868@c.us'){
-        
-   
-        switch (msg.type) {
-            case 'chat': 
-                console.log('Chat')
-                break;
-            case 'buttons_response': 
-                const result = nivelamento.find( user => user.userNumber === msg.from)
-                console.log(result)
-                if(msg.body.toLowerCase()==='começar nivelamento' && result.state == 0){ // e status = 0
-                    await sendQuestion1(msg)
-                    
-                    const tmpData = result
-                    nivelamento[nivelamento.indexOf(result)] = {
-                        userNumber: tmpData.userNumber,
-                        userName : tmpData.userName,
-                        awnser: [...tmpData.awnser, msg.body],
-                        state: 1
-                    }
-                } else if(resposta1.indexOf(msg.body) !== -1 && result.state == 1) { // e status = 1
-                    await sendQuestion2(msg)
-                    const tmpData = result
-                    nivelamento[nivelamento.indexOf(result)] = {
-                        userNumber: tmpData.userNumber,
-                        userName : tmpData.userName,
-                        awnser: [...tmpData.awnser, msg.body],
-                        state: 2
-                    }
-                    // muda status para 2
-                } else if(resposta2.indexOf(msg.body) !== -1 && result.state == 2) { // e status = 2
-                    await sendQuestion3(msg)
-                    const tmpData = result
-                    nivelamento[nivelamento.indexOf(result)] = {
-                        userNumber: tmpData.userNumber,
-                        userName : tmpData.userName,
-                        awnser: [...tmpData.awnser, msg.body],
-                        state: 3
-                    }
-                    // muda status para 3
-                } else{
-                    await client.sendMessage(msg.from, 'Opção inválida.')
-                }
-                break;
-            case 'list_response': 
-                await client.sendMessage(msg.from, `Você escolheu: ${msg.body.split('\n')[0]}\n\nPor favor aguarde um instante que uma artesã irá finalizar seu atendimento.`)
-                const media = MessageMedia.fromFilePath('./public/stickers/hi.png');
-                await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
-                setTimeout(async()=>{
-                    var rn = Math.floor(Math.random()*suporte.length)
-                    await client.sendMessage(msg.from, `*${suporte[rn]} entrou na conversa.*`)
-                    setTimeout(async()=>{await chat.sendStateTyping()},2000)
-                }, 10000)
-                setTimeout(async()=>{
-                    await client.sendMessage(msg.from, `Oiie ${fname}, tudo bem com você?\n\nVi aqui que você respondeu que gosta de receitas de ${msg.body.split('\n')[0].toLowerCase()}, então irei separar três para você escolher uma que te agrade mais ta bem?`)
-                    setTimeout(async()=>{await chat.sendStateTyping()},2000)
-                }, 20000)
-                setTimeout(async()=>{
-                    await sendRecipeChoose( msg)
-                }, 25000)
-                // muda status para 4
-                break;
-
+{
+    "type": "button",
+    "title": "Certo, então vamos começar.",
+    "body": "\nResponda três perguntas rápidas para saber qual seu nível atual, quando estiver pronta clique no botão abaixo.\n\n",
+    "footer": "Para começar clique no botão abaixo 👇",
+    "buttons": [
+        {
+        "id": "1",
+        "text": "Começar Nivelamento"
         }
-        if (startKewords.indexOf(msg.body.toLowerCase()) !== -1) {
-            const chat = await msg.getContact()
-            const media = MessageMedia.fromFilePath('./public/stickers/whoami.png');
-            await client.sendMessage(msg.from, media, {sendMediaAsSticker: true})
-            let button = new Buttons('\n🤖 Me chamo Amibô, seu amigo robô.\n\nEstou aqui para separar sua aula gratuita.\nMas antes de separar uma aula para você eu preciso que me responda três perguntas rápidas para saber qual seu nível atual, tudo bem?',[{body:'Começar Nivelamento'}],`Oiiie ${fname} tudo bem?`,'\nPara começar clique no botão abaixo 👇');
-            const msg1 = await client.sendMessage(msg.from, button);
-            nivelamento.push({
-                userNumber: msg.from,
-                userName : fname,
-                awnser: [],
-                state: 0
-            })
-            // coloca usuario na array com estado 0
-        }
-        if (msg.body === '!lista') {
-            const chat = await msg.getChat();
-            let sections = [
-                {
-                    title:'Fritos',
-                    rows:[
-                        {title:'Coxinha', description: 'R$ 5,00'},
-                        {title:'Quibe', description: 'R$ 5,00'},
-                        {title:'Pizzarola', description: 'R$ 5,00'},
-                        {title:'Croquete', description: 'R$ 5,00'},
-                    ]
-                },
-            ];
-            let list = new List('\n\nPara continuar selecione o salgado na lista de opções abaixo.','Ver Opções',sections,'Olá, seja bem vindo(a)','Salgados & Delivery');
-            client.sendMessage(msg.from, list);
-        }
-    }
-    //if(msg.type==='buttons_response') console.log(msg)
-    //console.log(msg.type)
-    //console.log(msg.id)
-    
-    //console.log('Nova mensagem', msg);
-    /**
-     * Lista prop
-     * 
-     * type = 'list_response'
-     * selected = 'selectedRowId' 
-     * body = 'body' 
-     */
-    //console.log(msg)
-    //const chat = await msg.getContact()
-    //const userName = chat.verifiedName ? chat.verifiedName : chat.pushname
-    //const userId = chat.id.user
-    //const userServer = chat.id.server
-    //const userSerialized = chat.id._serialized
-    
-
-   
+    ],
+    "delay": 2000,
+    "state": 1
+}
 
 
-// usuario entra no chat, verifica se ta no bd ou se tem que criar, se tiver verificar estado
-//  se for nova pessoa fazer nivelamento
-//  add bd para cron
-// to do modularizar changestate
+{
+    "type": "button",
+    "title": "Pergunta 1",
+    "body": "O que você busca com os Amigurumis?",
+    "footer": "Escolha clicando nos botões abaixo 👇",
+    "buttons": [
+      {
+        "id": "1",
+        "text": "Faturar vendendo amigurumis"
+      },
+      {
+        "id": "2",
+        "text": "Fazer como terapia e saúde mental"
+      },
+      {
+        "id": "3",
+        "text": "Um hobby para passar o tempo"
+      }
+    ],
+    "delay": 2000,
+    "state": 2
+  }
+
+
+  {
+    "type": "button",
+    "title": "Pergunta 2",
+    "body": "Qual a sua afinidade com essas fofuras?",
+    "footer": "Escolha clicando nos botões abaixo 👇",
+    "buttons": [
+      {
+        "id": "1",
+        "text": "Vai ser meu primeiro Amigurumi"
+      },
+      {
+        "id": "2",
+        "text": "Já fiz alguns mais simples"
+      },
+      {
+        "id": "3",
+        "text": "Já faço e vendo, quero mais modelos"
+      }
+    ],
+    "delay": 2000,
+    "state": 3
+  }
+
+  {
+    "type": "list",
+    "title": "Pergunta 3",
+    "body": "\n\nPara finalizar, gostaria de saber quais modelos de amigurumis você gosta mais, você pode escolher clicando abaixo",
+    "footer": "Escolha clicando nos botões abaixo 👇",
+    "sections": [
+      {
+        "title": "Escolha o modelo",
+        "rows": [
+          {
+            "title": "Bonecos",
+            "description": "Quero receitas de bonecas, bonecos de roupas customizadas"
+          },
+          {
+            "title": "Animais",
+            "description": "Quero receitas de Animais como gato, cachorro, safari e outros"
+          },
+          {
+            "title": "Desenhos",
+            "description": "Quero receitas de filmes, super herois, e outros tipos de cartoons"
+          },
+          {
+            "title": "Comidas",
+            "description": "Quero receitas de todos os tipos de frutas e guloseimas"
+          },
+          {
+            "title": "Religiosas",
+            "description": "Quero receitas religiosas"
+          },
+          {
+            "title": "Natalinas",
+            "description": "Quero receitas de duendes, bonecos de neve, renas e outros."
+          }
+        ]
+      }
+    ],
+    "btnText": "Escolher Modelo",
+    "delay": 2000,
+    "state": 4
+  }
+
+
+
+  {
+    "type": "button",
+    "title": "Prontinho escolha uma receita",
+    "body": "midia",
+    "footer": "\nSelecione uma receita clicando abaixo 👇",
+    "buttons": [
+      {
+        "id": "1",
+        "text": "Receita 1"
+      },
+      {
+        "id": "1",
+        "text": "Receita 2"
+      },
+      {
+        "id": "1",
+        "text": "Receita 3"
+      }
+    ],
+    "delay": 2000,
+    "state": 5
+  }
+
+  {
+    "type": "text",
+    "body": "Muito linda essa receita !receita ! Para acessar é só clicar no link abaixo ta bem, qualquer dúvida é só perguntar.\n\n!url",
+    "delay": 5000,
+    "state": 6
+  }

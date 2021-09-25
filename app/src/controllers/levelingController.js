@@ -76,9 +76,9 @@ exports.simulateAssistant = async (msg, contact) => {
             setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
         }, 10000)
         setTimeout(async()=>{
-            await client.sendMessage(msg.from, `Oiie ${contact.data.name}, tudo bem com você?\n\nVi aqui que você respondeu que ${choose.choose}`)
+            await client.sendMessage(msg.from, `Oiie ${contact.data.fname}, tudo bem com você?\nVi aqui que você respondeu que ${choose.choose}`)
             setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
-        }, 20000)
+        }, 25000)
         setTimeout(async()=>{
             setTimeout(async()=>{await wppController.simulateTyping(msg)},2000)
             if(choose.level > 0){
@@ -86,9 +86,18 @@ exports.simulateAssistant = async (msg, contact) => {
             }
             else {
                 await controller.updateContactRecipes(msg.from, 'abelhinha')
-                await client.sendMessage(msg.from,`Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nwww.curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
+                await client.sendMessage(msg.from,`Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nhttps://curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
             }
-        },30000)
+        }, 40000)
+        // add usuario na sequencia do cron
+        // A cada 1 hora, vai no banco de dados, pega uma lista e faça oq a lista pede
+        // sequencia1 = [{ msgId, hora atual + 1dia}, msgId, msgId]
+        // state -> usuario, sequencia, state, data
+        // user next state
+
+        // msg = {}
+
+        // setTimeout(async()=> {}, 1000 * 7200)
 }
 
 exports.newLevelingContact = async(msg, contact) => {

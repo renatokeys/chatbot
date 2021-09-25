@@ -8,6 +8,19 @@ const wppController = require('./controllers/wppController')
 const nlpController= require('./controllers/nlpController')
 
 client.on('message', async msg => {
+    // if chat, check keyword -> nlp
+
+    /**
+     *  
+     *  // cron rodando a cada 1h
+     * pega todas msgs que nextstate = now,
+     * faz fila de envio com diferença de x segundos.
+     * 
+     *  // Msg
+     * Recebe msg
+     * Verifica se já existe usuario ? verifica tipo da msg : cria usuario e envia para sequencia nivelamento
+     */
+
     //await nlpController.nlp(msg)
     //await adminController.checkAdminResponses(msg)
     //await wppController.notifyAdmins(msg)
@@ -29,7 +42,7 @@ client.on('message', async msg => {
             if(contact.data.state > 4) return helpers.sendAlreadyResponse(msg, client)
             await levelingController.simulateAssistant(msg, contact)
         } else if(msg.type === 'chat') {
-            console.log('nlp')
+            //await nlpController.nlp(msg)
         }
     }
 });

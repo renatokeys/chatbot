@@ -22,7 +22,7 @@ exports.checkAnswerProcess = async (msg) => {
     }
 }
 
-async function inicia(){
+exports.initNlp = async () => {
     addIntent('olá', 'hello')
     addIntent('oi', 'hello')
     addIntent('oii', 'hello')
