@@ -13,7 +13,7 @@
         "text": "Não pode"
       }
     ],
-    "delay": 4000,
+    "delay": 1000,
     "state": 0
   }
 
@@ -150,6 +150,6 @@
   {
     "type": "text",
     "body": "Muito linda essa receita !receita ! Para acessar é só clicar no link abaixo ta bem, qualquer dúvida é só perguntar.\n\n!url",
-    "delay": 5000,
+    "delay": 10000,
     "state": 6
   }

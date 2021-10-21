@@ -5,15 +5,15 @@ const fs = require('fs');
 const SESSION_FILE_PATH = '../../manyzap.json';
 
 let sessionData;
-if(fs.existsSync(SESSION_FILE_PATH)) {
-    sessionData = require(SESSION_FILE_PATH);
-}
+//if (fs.existsSync(SESSION_FILE_PATH)) {
+//sessionData = require(SESSION_FILE_PATH);
+//}
 const client = new Client({
     session: sessionData
 });
 
 client.on('qr', qr => {
-    qrcode.generate(qr, {small: true});
+    qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
@@ -21,8 +21,9 @@ client.on('ready', () => {
 });
 
 client.on('authenticated', (session) => {
+    console.log('sessão :', session)
     sessionData = session;
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), (err) => {
+    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), { flag: 'w' }, (err) => {
         if (err) {
             console.error(err);
         }

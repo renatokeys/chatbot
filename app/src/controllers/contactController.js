@@ -1,4 +1,4 @@
-const [ client, q ] = require('../services/faunaService')
+const [client, q] = require('../services/faunaService')
 
 
 exports.createContact = async (data) => {
@@ -18,13 +18,13 @@ exports.checkContactExists = async (data) => {
             userExists: q.Exists(
                 q.Match(q.Index('contact_by_number'), data.number)
             )
-          },
+        },
             q.If(
                 q.Var('userExists'),
                 q.Get(q.Match(q.Index('contact_by_number'), data.number)),
                 q.Create(q.Collection('contact'), { data: data })
             )
-          )
+        )
     )
     return contact;
 }
@@ -47,7 +47,7 @@ exports.updateContactName = async (number, name) => {
 exports.updateContactState = async (number, state) => {
     const contact = await client.query(
         q.Let({
-            doc : q.Get(q.Match(q.Index('contact_by_number'), number))
+            doc: q.Get(q.Match(q.Index('contact_by_number'), number))
         },
             q.Update(q.Select(['ref'], q.Var('doc')), {
                 data: {
@@ -62,11 +62,11 @@ exports.updateContactState = async (number, state) => {
 exports.updateResp = async (number, resp) => {
     const contact = await client.query(
         q.Let({
-            doc : q.Get(q.Match(q.Index('contact_by_number'), number))
+            doc: q.Get(q.Match(q.Index('contact_by_number'), number))
         },
             q.Update(q.Select(['ref'], q.Var('doc')), {
                 data: {
-                    answer : q.Append(resp, q.Select(['data', 'answer'], q.Var('doc'))),
+                    answer: q.Append(resp, q.Select(['data', 'answer'], q.Var('doc'))),
                 }
             })
         )
@@ -77,13 +77,13 @@ exports.updateResp = async (number, resp) => {
 exports.updateContactRecipes = async (number, recipeNumber) => {
     const contact = await client.query(
         q.Let({
-            doc : q.Get(q.Match(q.Index('contact_by_number'), number))
+            doc: q.Get(q.Match(q.Index('contact_by_number'), number))
         },
-        q.Update(q.Select(['ref'], q.Var('doc')), {
-            data: {
-                recipes : q.Append(recipeNumber, q.Select(['data', 'recipes'], q.Var('doc')))
-            }
-        })
+            q.Update(q.Select(['ref'], q.Var('doc')), {
+                data: {
+                    recipes: q.Append(recipeNumber, q.Select(['data', 'recipes'], q.Var('doc')))
+                }
+            })
         )
     )
     return contact;
