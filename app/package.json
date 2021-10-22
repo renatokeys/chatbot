@@ -17,6 +17,7 @@
     "whatsapp-web.js": "https://github.com/pedroslopez/whatsapp-web.js"
   },
   "devDependencies": {
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "prisma": "^3.3.0"
   }
 }

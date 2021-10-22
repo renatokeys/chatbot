@@ -8,7 +8,7 @@ exports.getMessageByState = async (state) => {
 }
 exports.getMessageByResponse = async (response) => {
     const messages = await client.query(
-        q.Get(q.Match(q.Index('message_by_body'), response))
+        q.Get(q.Match(q.Index('message_by_text'), response))
     )
     return messages
 }

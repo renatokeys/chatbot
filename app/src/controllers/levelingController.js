@@ -44,20 +44,20 @@ const setChangeName = exports.setChangeName = async (msg) => {
 }
 
 exports.sendNextQuestion = async (msg, contact) => {
-    await controller.updateResp(msg.from, msg.body)
-    await controller.updateContactState(msg.from, contact.data.state + 1)
-    const initLeveling = await messageController.getMessageByState(contact.data.state + 1)
+    await controller.updateResp(msg.from, msg.body).catch(err => console.log(err))
+    await controller.updateContactState(msg.from, contact.data.state + 1).catch(err => console.log(err))
+    const initLeveling = await messageController.getMessageByState(contact.data.state + 1).catch(err => console.log(err))
     if (initLeveling.data.type === 'button') {
-        await wppController.sendButton(msg, initLeveling.data)
+        await wppController.sendButton(msg, initLeveling.data).catch(err => console.log(err))
     }
     else if (initLeveling.data.type === 'list') {
-        await wppController.sendList(msg, initLeveling.data)
+        await wppController.sendList(msg, initLeveling.data).catch(err => console.log(err))
     }
     else if (initLeveling.data.type === 'text') {
         setTimeout(async () => {
             let body = initLeveling.data.body;
             let url = helpers.getUrl(msg.body, contact.data.answer[3].split('\n')[0])
-            await controller.updateContactRecipes(msg.from, url.id)
+            await controller.updateContactRecipes(msg.from, url.id).catch(err => console.log(err))
             let number = msg.from
             number = number.replace('@c.us', '')
             body = body.replace('!url', `https://curso.artsdeamigurumi.online/aluno/${number}`)
@@ -85,19 +85,16 @@ exports.simulateAssistant = async (msg, contact) => {
         setTimeout(async () => { await wppController.simulateTyping(msg) }, 2000)
         if (choose.level > 0) {
             sendChooseRecipe(msg) // send message choosen
+            await sequenceController.addUserSequence({ number: msg.from, seq: 'avançado' }).catch(err => { console.log(err) })
         }
         else {
             await controller.updateContactRecipes(msg.from, 'abelhinha') // dup this to polvinho recipe.
             await client.sendMessage(msg.from, `Prontinho, separei uma super aula de iniciante para você se aventurar nesse lindo mundo dos amigurumis, clica no link abaixo para poder ver sua aula, beijos\n\nhttps://curso.artsdeamigurumi.online/aluno/${msg.from.split('@c.us')[0]}`)
+            await sequenceController.addUserSequence({ number: msg.from, seq: 'iniciante' }).catch(err => { console.log(err) })
+
         }
     }, 40000)
-    let userSeq = ''
-    if (level == 0) {
-        userSeq = 'iniciante'
-    } else {
-        userSeq = 'avançado'
-    }
-    await sequenceController.addUserSequence({ number: msg.from, seq: userSeq })
+
 }
 
 exports.newLevelingContact = async (msg, contact) => {
