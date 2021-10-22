@@ -17,27 +17,27 @@ const getSequenceByName = exports.getSequenceByName = async function getSequence
 
 exports.addUserSequence = async function addUsertoSequenceByLevelingChoose({ number, seq }) {
     const sequence = await getSequenceByName(seq)
-    console.log(sequence)
     let curTime = 0
     const now = Date.now()
+    const validateTime = (min, max, msgDate) => {
+        var date = new Date(msgDate);
+        var hours = date.getHours();
+        if (hours >= min && hours <= max) return msgDate
+        const diff = ((24 - hours) + min) * 3600
+        return msgDate + diff
+    }
     sequence.messages.map(async (value, index) => {
         curTime += value.time
         let msgDate = now + curTime
-        var date = new Date(msgDate);
-        // Hours part from the timestamp
-        var hours = date.getHours();
-        console.log(hours)
-        // limit_min 
-        // limit_max
-        // verificar se o tempo da msg vai estar dentro do limite, se n tiver add x horas até o prox min hora e add time ao curTime
-        // verificar se a msg vai ser no mesmo dia de hoje, se sim -> atualiza a lista do cron 
-
-
+        if (value.limit_min || value.limit_max) {
+            msgDate = validateTime(value.limit_min, value.limit_max, msgDate)
+            curTime = msgDate
+        }
         await messageController.addMessageFromSequence({
             number,
             message: value.id,
             date: msgDate
-        })
+        }).catch(err => console.log(err))
     })
 
     // ver resposta do usuario
