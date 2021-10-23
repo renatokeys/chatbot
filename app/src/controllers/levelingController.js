@@ -115,6 +115,7 @@ exports.newLevelingContact = async (msg, contact) => {
             const changeName = await checkChangeName(msg)
             if (!changeName) {
                 console.log('nlp')
+                // envia p admin
             }
         } else if (msg.type === 'buttons_response') {
             if (msg.body === 'Não pode') {
@@ -122,7 +123,6 @@ exports.newLevelingContact = async (msg, contact) => {
                 await setChangeName(msg)
             }
             else {
-                console.log(contact)
                 await controller.updateContactState(msg.from, contact.data.state + 1).catch(err => console.log(err)).then(data => console.log(data))
                 const initLeveling = await messageController.getMessageByState(contact.data.state + 1)
                 if (initLeveling.data.type === 'button') {

@@ -21,3 +21,16 @@ exports.addMessageFromSequence = async (data) => {
     )
     return addMessage
 }
+
+exports.getMessagesFromDay = async (day, allMsg) => {
+    const messages = await client.query(
+        q.Paginate(q.Match(q.Index('messages_by_day'), day))
+    )
+    messages.data.map(async (value) => {
+        const message = await client.query(
+            q.Get(value)
+        )
+        allMsg.push(message.data)
+    })
+
+}

@@ -6,8 +6,8 @@ const firstName = exports.firstName = (userName) => {
     if (/\s/.test(fname)) {
         fname = userName.split(" ")[0];
     }
-    fname = fname.toLowerCase()
-    fname = fname.charAt(0).toUpperCase() + fname.slice(1);
+    fname = fname?.toLowerCase()
+    fname = fname?.charAt(0)?.toUpperCase() + fname?.slice(1);
     return fname;
 };
 
@@ -167,12 +167,13 @@ exports.getUrl = (data, liked) => {
 };
 
 exports.formartName = (string) => {
-    const prefix = ['prefiro que ', 'me chame de', 'igual minha ', 'mãe ',', ','pode me chamar de ', 'pode me chamar ', 'eu gosto que ', 'me chame ', 'me chamo ',' pode chamar ','meu nome é ','meu nome e ', 'meu nome ','eu sou ', 'sou o ', 'me chama de ']
+    const prefix = ['prefiro que ', 'me chame de', 'igual minha ', 'mãe ', ', ', 'pode me chamar de ', 'pode me chamar ', 'eu gosto que ', 'me chame ', 'me chamo ', ' pode chamar ', 'meu nome é ', 'meu nome e ', 'meu nome ', 'eu sou ', 'sou o ', 'me chama de ']
     let name = string.toLowerCase();
-    prefix.forEach(prefixString => { 
-        if(name.includes(prefixString)){
+    prefix.forEach(prefixString => {
+        if (name.includes(prefixString)) {
             name = name.replace(prefixString, '')
-        } })
+        }
+    })
     return name;
 }
 
@@ -180,7 +181,7 @@ exports.formatChoose = async (data) => {
     console.log(data)
     let choose = data;
     let level = 0;
-    switch(data) {
+    switch (data) {
         case 'Vai ser meu primeiro Amigurumi':
             choose = 'vai ser seu primeiro amigurumi então irei separar algumas vídeo aulas para você seguir e fazer seu primeiro amigurumi.'
             break;
@@ -202,11 +203,11 @@ exports.formatChoose = async (data) => {
 }
 
 exports.getSupportName = () => {
-    const fname = ['Suelem', 'Leticia','Amanda','Marcela','Patricia','Maria','Lorena','Joana','Julia','Junia','Juliana','Sthefanie','Sara','Sueli','Vanessa']
-    const lname = ['Soares', 'Santos', 'Silva','Oliveira', 'Alves', 'Pereira', 'Rodrigues','Ferreira', 'Gomes', 'Martins']
-    var getFirstName = Math.floor(Math.random()*fname.length)
-    var getLastName = Math.floor(Math.random()*lname.length)
-    const assistantName = `${fname[getFirstName]} ${lname[getLastName]}` 
+    const fname = ['Suelem', 'Leticia', 'Amanda', 'Marcela', 'Patricia', 'Maria', 'Lorena', 'Joana', 'Julia', 'Junia', 'Juliana', 'Sthefanie', 'Sara', 'Sueli', 'Vanessa']
+    const lname = ['Soares', 'Santos', 'Silva', 'Oliveira', 'Alves', 'Pereira', 'Rodrigues', 'Ferreira', 'Gomes', 'Martins']
+    var getFirstName = Math.floor(Math.random() * fname.length)
+    var getLastName = Math.floor(Math.random() * lname.length)
+    const assistantName = `${fname[getFirstName]} ${lname[getLastName]}`
     return assistantName;
 }
 

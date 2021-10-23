@@ -6,6 +6,24 @@ const levelingController = require('./controllers/levelingController')
 const adminController = require('./controllers/adminController')
 const wppController = require('./controllers/wppController')
 const nlpController = require('./controllers/nlpController')
+const cron = require('node-cron')
+const { readListDay } = require('./jobs/getMessages')
+const { checkMessage } = require('./jobs/sendMessages')
+
+readListDay()
+cron.schedule('* * * * *', async () => {
+    checkMessage()
+}, {
+    scheduled: true,
+    timezone: "America/Sao_Paulo"  // use Brazil timezone
+});
+
+cron.schedule('1 0 * * *', async () => {
+    await readListDay()
+}, {
+    scheduled: true,
+    timezone: "America/Sao_Paulo"  // use Brazil timezone
+});
 
 client.on('message', async msg => {
     // if chat, check keyword -> nlp
@@ -42,7 +60,9 @@ client.on('message', async msg => {
             if (contact.data.state > 4) return helpers.sendAlreadyResponse(msg, client)
             await levelingController.simulateAssistant(msg, contact).catch(err => console.log(err))
         } else if (msg.type === 'chat') {
-            //await nlpController.nlp(msg)
+            await nlpController.nlp(msg)
+            await adminController.checkAdminResponses(msg)
+            await wppController.notifyAdmins(msg)
         }
     }
 });

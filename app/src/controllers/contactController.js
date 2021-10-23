@@ -12,6 +12,13 @@ exports.createContact = async (data) => {
     return contact;
 }
 
+exports.getContactByNumber = async (data) => {
+    const contact = await client.query(
+        q.Get(q.Match(q.Index('contact_by_number'), data))
+    )
+    return contact
+}
+
 exports.checkContactExists = async (data) => {
     const contact = await client.query(
         q.Let({
